@@ -37,5 +37,15 @@
         android:label="@string/title_activity_add_edit"
         android:theme="@style/Theme.MedicalAppointmentTracker"
         android:windowSoftInputMode="adjustResize" />
+
+    <activity
+        android:name=".MedicationListActivity"
+        android:exported="false" />
+
+    <activity
+        android:name=".AddEditMedicationActivity"
+        android:exported="false" />
+
     </application>
+
 </manifest>

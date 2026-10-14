@@ -31,4 +31,20 @@
         android:layout_weight="1"
         android:text="Add Appointment" />
 
+    <Button
+        android:id="@+id/viewMedsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_weight="1"
+        android:text="View Medications" />
+
+    <Button
+        android:id="@+id/addMedsButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        android:text="Add Medication" />
+
 </LinearLayout>
