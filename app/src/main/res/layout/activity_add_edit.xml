@@ -21,7 +21,8 @@
                 android:id="@+id/formTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Add Mark"
+                android:layout_marginTop="40dp"
+                android:text="Add Appointment"
                 android:textSize="28sp"
                 android:textStyle="bold" />
 
@@ -33,7 +34,8 @@
                     android:id="@+id/titleInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Title" />
+                    android:hint="Title"
+                    android:paddingTop="20dp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

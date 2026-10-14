@@ -21,6 +21,13 @@
         android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/doctorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="doctor"
+        android:textSize="16sp" />
+
+    <TextView
         android:id="@+id/coordinatesText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

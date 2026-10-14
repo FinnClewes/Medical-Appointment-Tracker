@@ -15,7 +15,7 @@
             android:id="@+id/marksTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="20dp"
+            android:paddingTop="40dp"
             android:text="Placed Marks"
             android:textSize="28sp"
             android:textStyle="bold" />
