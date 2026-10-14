@@ -25,6 +25,9 @@ class PlacedMarkAdapter(
         val doctorText: TextView =
             itemView.findViewById(R.id.doctorText)
 
+        val dateText: TextView =
+            itemView.findViewById(R.id.dateText)
+
         val coordinatesText: TextView =
             itemView.findViewById(R.id.coordinatesText)
 
@@ -65,6 +68,9 @@ class PlacedMarkAdapter(
 
         holder.doctorText.text =
             mark.doctor
+
+        holder.dateText.text =
+            mark.date
 
         holder.coordinatesText.text =
             "X: ${mark.x}, Y: ${mark.y}"

@@ -28,6 +28,12 @@
         android:textSize="16sp" />
 
     <TextView
+        android:id="@+id/dateText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="date" />
+
+    <TextView
         android:id="@+id/coordinatesText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

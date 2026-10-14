@@ -1,5 +1,6 @@
 package org.setu.medical_appointment_tracker
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -7,6 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import java.util.Calendar
 import kotlin.toString
 
 class AddEditActivity : AppCompatActivity() {
@@ -14,6 +16,7 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var titleInput: EditText
     private lateinit var descriptionInput: EditText
     private lateinit var doctorInput: EditText
+    private lateinit var dateInput: EditText
     private lateinit var xInput: EditText
     private lateinit var yInput: EditText
 
@@ -29,6 +32,8 @@ class AddEditActivity : AppCompatActivity() {
         descriptionInput = findViewById(R.id.descriptionInput)
 
         doctorInput = findViewById(R.id.doctorInput)
+
+        dateInput = findViewById(R.id.dateInput)
 
         xInput = findViewById(R.id.xInput)
 
@@ -49,6 +54,8 @@ class AddEditActivity : AppCompatActivity() {
 
             loadExistingMark(editingId!!)
         }
+
+        dateInput.setOnClickListener { showDatePicker() }
 
         saveButton.setOnClickListener {
             saveMark()
@@ -77,8 +84,22 @@ class AddEditActivity : AppCompatActivity() {
         titleInput.setText(mark.title)
         descriptionInput.setText(mark.description)
         doctorInput.setText(mark.doctor)
+        dateInput.setText(mark.date)
         xInput.setText(mark.x.toString())
         yInput.setText(mark.y.toString())
+    }
+
+    private fun showDatePicker() {
+        val cal = Calendar.getInstance()
+        DatePickerDialog(
+            this,
+            { _, year, month, day ->
+                dateInput.setText(String.format("%02d/%02d/%04d", day, month + 1, year))
+            },
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_MONTH)
+        ).show()
     }
 
     private fun saveMark() {
@@ -86,6 +107,7 @@ class AddEditActivity : AppCompatActivity() {
         val title = titleInput.text.toString().trim()
         val description = descriptionInput.text.toString().trim()
         val doctor = doctorInput.text.toString().trim()
+        val date = dateInput.text.toString().trim()
 
         if (title.isEmpty()) {
             titleInput.error = "Title is required"
@@ -112,6 +134,7 @@ class AddEditActivity : AppCompatActivity() {
                 title = title,
                 description = description,
                 doctor = doctor,
+                date = date,
                 x = x,
                 y = y
             )
@@ -131,6 +154,7 @@ class AddEditActivity : AppCompatActivity() {
                 title = title,
                 description = description,
                 doctor = doctor,
+                date = date,
                 x = x,
                 y = y
             )
