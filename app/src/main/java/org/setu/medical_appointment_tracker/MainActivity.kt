@@ -25,9 +25,27 @@ class MainActivity : AppCompatActivity() {
         val addMarkButton =
             findViewById<Button>(R.id.addMarkButton)
 
+        val viewMedsButton =
+            findViewById<Button>(R.id.viewMedsButton)
+
+        val addMedsButton =
+            findViewById<Button>(R.id.addMedsButton)
+
         viewMarksButton.setOnClickListener {
             startActivity(
                 Intent(this, MarkListActivity::class.java)
+            )
+        }
+
+        addMedsButton.setOnClickListener {
+            startActivity(
+                Intent(this, AddEditMedicationActivity::class.java)
+            )
+        }
+
+        viewMedsButton.setOnClickListener {
+            startActivity(
+                Intent(this, MedicationListActivity::class.java)
             )
         }
 
