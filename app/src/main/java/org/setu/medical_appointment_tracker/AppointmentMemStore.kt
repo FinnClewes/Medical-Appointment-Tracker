@@ -21,6 +21,7 @@ class AppointmentMemStore {
             foundAppointment.title = appointment.title
             foundAppointment.description = appointment.description
             foundAppointment.doctor = appointment.doctor
+            foundAppointment.date = appointment.date
             foundAppointment.x = appointment.x
             foundAppointment.y = appointment.y
             true
