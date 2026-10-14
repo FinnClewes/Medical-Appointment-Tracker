@@ -9,7 +9,6 @@ data class AppointmentModel(
     var title: String = "",
     var description: String = "",
     var doctor: String = "",
-    var medication: Array<String> = emptyArray(),
     var x: Float = 0F,
     var y: Float = 0F
 )
