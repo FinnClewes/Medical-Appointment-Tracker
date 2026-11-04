@@ -1,15 +1,16 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
+import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.medical_appointment_tracker.data.AppData
+import org.setu.medical_appointment_tracker.adapters.MedicationAdapter
+import org.setu.medical_appointment_tracker.models.MedicationModel
+import org.setu.medical_appointment_tracker.R
 
 class MedicationListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView

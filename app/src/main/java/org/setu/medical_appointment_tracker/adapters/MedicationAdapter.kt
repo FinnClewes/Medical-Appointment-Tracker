@@ -1,4 +1,4 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.medical_appointment_tracker.R
+import org.setu.medical_appointment_tracker.models.MedicationModel
 
 class MedicationAdapter(
     private var marks: List<MedicationModel>,

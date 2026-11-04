@@ -1,5 +1,6 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.data
 
+import org.setu.medical_appointment_tracker.models.AppointmentModel
 import java.util.concurrent.atomic.AtomicLong
 
 class AppointmentMemStore {

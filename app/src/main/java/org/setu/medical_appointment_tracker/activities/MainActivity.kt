@@ -1,4 +1,4 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import org.setu.medical_appointment_tracker.R
 
 class MainActivity : AppCompatActivity() {
 

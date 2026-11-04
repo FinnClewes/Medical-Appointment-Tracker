@@ -1,15 +1,16 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import org.setu.medical_appointment_tracker.data.AppData
+import org.setu.medical_appointment_tracker.models.AppointmentModel
+import org.setu.medical_appointment_tracker.R
 import java.util.Calendar
-import kotlin.toString
 
 class AddEditActivity : AppCompatActivity() {
 

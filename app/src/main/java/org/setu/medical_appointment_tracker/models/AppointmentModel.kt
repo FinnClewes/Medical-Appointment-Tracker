@@ -1,6 +1,4 @@
-package org.setu.medical_appointment_tracker
-
-import java.sql.Date
+package org.setu.medical_appointment_tracker.models
 
 /**
  * Data class representing a single Placemark item.
@@ -14,12 +12,4 @@ data class AppointmentModel(
     var date: String = "",
     var x: Float = 0F,
     var y: Float = 0F
-)
-
-data class MedicationModel(
-    var id: Long = 0L,
-    var title: String = "",
-    var description: String = "",
-    var doctor: String = "",
-    var amount: Float = 0F
 )

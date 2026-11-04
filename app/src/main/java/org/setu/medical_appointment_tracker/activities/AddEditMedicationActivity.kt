@@ -1,4 +1,4 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
 import android.os.Bundle
 import android.widget.Button
@@ -6,6 +6,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import org.setu.medical_appointment_tracker.data.AppData
+import org.setu.medical_appointment_tracker.models.MedicationModel
+import org.setu.medical_appointment_tracker.R
 
 class AddEditMedicationActivity : AppCompatActivity() {
 
