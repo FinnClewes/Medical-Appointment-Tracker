@@ -8,11 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.setu.medical_appointment_tracker.R
 import org.setu.medical_appointment_tracker.models.AppointmentModel
+import timber.log.Timber
 
 class PlacedMarkAdapter(
     private var marks: List<AppointmentModel>,
-    private val onEdit: (AppointmentModel) -> Unit,
-    private val onDelete: (AppointmentModel) -> Unit
+    private val listener: OnApptListener
 ) : RecyclerView.Adapter<PlacedMarkAdapter.MarkViewHolder>() {
 
     class MarkViewHolder(itemView: View) :
@@ -77,12 +77,14 @@ class PlacedMarkAdapter(
         holder.coordinatesText.text =
             "X: ${mark.x}, Y: ${mark.y}"
 
-        holder.editButton.setOnClickListener {
-            onEdit(mark)
+        holder.itemView.setOnClickListener {
+            Timber.i("Appointment clicked: id=%d, title=%s", mark.id, mark.title)
+            listener.onApptClick(mark)
         }
 
-        holder.deleteButton.setOnClickListener {
-            onDelete(mark)
+        holder.itemView.setOnLongClickListener {
+            Timber.i("Appointment long-clicked: id=%d, title=%s", mark.id, mark.title)
+            listener.onApptLongClick(mark)
         }
     }
 
@@ -91,6 +93,7 @@ class PlacedMarkAdapter(
     }
 
     fun updateMarks(newMarks: List<AppointmentModel>) {
+        Timber.d("Updating appointments: %d -> %d items", marks.size, newMarks.size)
         marks = newMarks
         notifyDataSetChanged()
     }
