@@ -1,5 +1,7 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.data
 
+import org.setu.medical_appointment_tracker.models.AppointmentModel
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicLong
 
 class AppointmentMemStore {
@@ -13,6 +15,7 @@ class AppointmentMemStore {
     fun create(appointment: AppointmentModel) {
         appointment.id = lastId.incrementAndGet()
         appointments.add(appointment)
+        Timber.i("Created appointment: id=%d, title=%s", appointment.id, appointment.title)
     }
 
     fun update(appointment: AppointmentModel): Boolean {
@@ -24,8 +27,10 @@ class AppointmentMemStore {
             foundAppointment.date = appointment.date
             foundAppointment.x = appointment.x
             foundAppointment.y = appointment.y
+            Timber.i("Updated appointment: id=%d, title=%s", appointment.id, appointment.title)
             true
         } else {
+            Timber.i("Update failed: no appointment with id=%d", appointment.id)
             false
         }
     }
@@ -34,8 +39,10 @@ class AppointmentMemStore {
         val foundAppointment = findOne(id)
         return if (foundAppointment != null) {
             appointments.remove(foundAppointment)
+            Timber.i("Deleted appointment: id=%d", id)
             true
         } else {
+            Timber.w("Delete failed: no appointment with id=%d", id)
             false
         }
     }

@@ -1,4 +1,4 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.medical_appointment_tracker.R
+import org.setu.medical_appointment_tracker.models.MedicationModel
+import timber.log.Timber
 
 class MedicationAdapter(
     private var marks: List<MedicationModel>,
-    private val onEdit: (MedicationModel) -> Unit,
-    private val onDelete: (MedicationModel) -> Unit
+    private val listener: OnMedsListener
 ) : RecyclerView.Adapter<MedicationAdapter.MarkViewHolder>() {
 
     class MarkViewHolder(itemView: View) :
@@ -69,12 +71,14 @@ class MedicationAdapter(
         holder.amountText.text =
             "${mark.amount}mg"
 
-        holder.editMedsButton.setOnClickListener {
-            onEdit(mark)
+        holder.itemView.setOnClickListener {
+            Timber.i("Medication clicked: id=%d, title=%s", mark.id, mark.title)
+            listener.onMedsClick(mark)
         }
 
-        holder.deleteMedsButton.setOnClickListener {
-            onDelete(mark)
+        holder.itemView.setOnLongClickListener {
+            Timber.i("Medication long-clicked: id=%d, title=%s", mark.id, mark.title)
+            listener.onMedsLongClick(mark)
         }
     }
 
@@ -83,6 +87,7 @@ class MedicationAdapter(
     }
 
     fun updateMarks(newMarks: List<MedicationModel>) {
+        Timber.d("Updating medications: %d -> %d items", marks.size, newMarks.size)
         marks = newMarks
         notifyDataSetChanged()
     }

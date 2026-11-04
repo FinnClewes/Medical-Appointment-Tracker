@@ -1,14 +1,17 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
+import android.os.Bundle
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.medical_appointment_tracker.data.AppData
+import org.setu.medical_appointment_tracker.models.AppointmentModel
+import org.setu.medical_appointment_tracker.adapters.PlacedMarkAdapter
+import org.setu.medical_appointment_tracker.R
+import org.setu.medical_appointment_tracker.adapters.OnApptListener
+import timber.log.Timber
 
 class MarkListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -25,12 +28,16 @@ class MarkListActivity : AppCompatActivity() {
         adapter = PlacedMarkAdapter(
             marks = AppData.placedMarks.findAll(),
 
-            onEdit = { mark ->
-                editMark(mark)
-            },
+            listener = object : OnApptListener {
 
-            onDelete = { mark ->
-                deleteMark(mark)
+                override fun onApptClick(mark: AppointmentModel) {
+                    editMark(mark)
+                }
+
+                override fun onApptLongClick(mark: AppointmentModel): Boolean {
+                    deleteMark(mark)
+                    return true
+                }
             }
         )
 
@@ -69,6 +76,8 @@ class MarkListActivity : AppCompatActivity() {
         intent.putExtra("id", mark.id)
 
         startActivity(intent)
+
+        Timber.d("Editing appointment id=${mark.id}, title=${mark.title}")
     }
 
     private fun deleteMark(mark: AppointmentModel) {
@@ -78,15 +87,7 @@ class MarkListActivity : AppCompatActivity() {
         adapter.updateMarks(
             AppData.placedMarks.findAll()
         )
+
+        Timber.d("Deleting appointment id=${mark.id}, title=${mark.title}")
     }
-    /*override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_mark_list)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.marksTitle)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-    }*/
 }

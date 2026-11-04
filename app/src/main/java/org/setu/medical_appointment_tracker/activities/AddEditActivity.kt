@@ -1,15 +1,17 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import org.setu.medical_appointment_tracker.data.AppData
+import org.setu.medical_appointment_tracker.models.AppointmentModel
+import org.setu.medical_appointment_tracker.R
+import timber.log.Timber
 import java.util.Calendar
-import kotlin.toString
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -58,10 +60,12 @@ class AddEditActivity : AppCompatActivity() {
         dateInput.setOnClickListener { showDatePicker() }
 
         saveButton.setOnClickListener {
+            Timber.i("Save button clicked")
             saveMark()
         }
 
         cancelButton.setOnClickListener {
+            Timber.i("Cancel button clicked")
             finish()
         }
     }
@@ -71,6 +75,7 @@ class AddEditActivity : AppCompatActivity() {
         val mark = AppData.placedMarks.findOne(id)
 
         if (mark == null) {
+            Timber.e("No appointment found with id=%d", id)
             Toast.makeText(
                 this,
                 "Mark not found",
@@ -110,6 +115,7 @@ class AddEditActivity : AppCompatActivity() {
         val date = dateInput.text.toString().trim()
 
         if (title.isEmpty()) {
+            Timber.w("Save failed: title is empty")
             titleInput.error = "Title is required"
             return
         }
@@ -117,6 +123,7 @@ class AddEditActivity : AppCompatActivity() {
         val x = xInput.text.toString().toFloatOrNull()
 
         if (x == null) {
+            Timber.w("Save failed: invalid X value '%s'", xInput.text)
             xInput.error = "Enter a valid number"
             return
         }
@@ -124,6 +131,7 @@ class AddEditActivity : AppCompatActivity() {
         val y = yInput.text.toString().toFloatOrNull()
 
         if (y == null) {
+            Timber.w("Save failed: invalid Y value '%s'", yInput.text)
             yInput.error = "Enter a valid number"
             return
         }
@@ -140,6 +148,8 @@ class AddEditActivity : AppCompatActivity() {
             )
 
             AppData.placedMarks.create(mark)
+
+            Timber.i("Appointment created: title=%s, x=%f, y=%f", mark.title, mark.x, mark.y)
 
             Toast.makeText(
                 this,
@@ -160,6 +170,8 @@ class AddEditActivity : AppCompatActivity() {
             )
 
             AppData.placedMarks.update(mark)
+
+            Timber.i("Mark updated: id=%d, title=%s", mark.id, mark.title)
 
             Toast.makeText(
                 this,

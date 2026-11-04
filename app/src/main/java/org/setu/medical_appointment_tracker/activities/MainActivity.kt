@@ -1,4 +1,4 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import org.setu.medical_appointment_tracker.R
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        Timber.plant(Timber.DebugTree())
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainTitle)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -32,24 +35,28 @@ class MainActivity : AppCompatActivity() {
             findViewById<Button>(R.id.addMedsButton)
 
         viewMarksButton.setOnClickListener {
+            Timber.i("View Appointments clicked, opening MarkListActivity")
             startActivity(
                 Intent(this, MarkListActivity::class.java)
             )
         }
 
         addMedsButton.setOnClickListener {
+            Timber.i("Add Meds clicked, opening AddEditMedication")
             startActivity(
                 Intent(this, AddEditMedicationActivity::class.java)
             )
         }
 
         viewMedsButton.setOnClickListener {
+            Timber.i("View Meds clicked, opening MedicationListActivity")
             startActivity(
                 Intent(this, MedicationListActivity::class.java)
             )
         }
 
         addMarkButton.setOnClickListener {
+            Timber.i("Add Appointment clicked, opening AddEditActivity")
             startActivity(
                 Intent(this, AddEditActivity::class.java)
             )

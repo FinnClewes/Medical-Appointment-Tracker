@@ -1,15 +1,18 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import android.content.Intent
+import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.setu.medical_appointment_tracker.data.AppData
+import org.setu.medical_appointment_tracker.adapters.MedicationAdapter
+import org.setu.medical_appointment_tracker.models.MedicationModel
+import org.setu.medical_appointment_tracker.R
+import org.setu.medical_appointment_tracker.adapters.OnMedsListener
+import timber.log.Timber
 
 class MedicationListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -28,12 +31,15 @@ class MedicationListActivity : AppCompatActivity() {
         adapter = MedicationAdapter(
             marks = AppData.placedMeds.findAll(),
 
-            onEdit = { mark ->
-                editMark(mark)
-            },
+            listener = object : OnMedsListener {
+                override fun onMedsClick(mark: MedicationModel) {
+                    editMark(mark)
+                }
 
-            onDelete = { mark ->
-                deleteMark(mark)
+                override fun onMedsLongClick(mark: MedicationModel): Boolean {
+                    deleteMark(mark)
+                    return true
+                }
             }
         )
 
@@ -72,6 +78,8 @@ class MedicationListActivity : AppCompatActivity() {
         intent.putExtra("id", mark.id)
 
         startActivity(intent)
+
+        Timber.d("Editing medication id=${mark.id}, title=${mark.title}")
     }
 
     private fun deleteMark(mark: MedicationModel) {
@@ -81,15 +89,7 @@ class MedicationListActivity : AppCompatActivity() {
         adapter.updateMarks(
             AppData.placedMeds.findAll()
         )
+
+        Timber.d("Deleting medication id=${mark.id}, title=${mark.title}")
     }
-    /*override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_mark_list)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.marksTitle)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-    }*/
 }

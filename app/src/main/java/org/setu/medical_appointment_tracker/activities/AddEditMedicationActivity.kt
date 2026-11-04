@@ -1,4 +1,4 @@
-package org.setu.medical_appointment_tracker
+package org.setu.medical_appointment_tracker.activities
 
 import android.os.Bundle
 import android.widget.Button
@@ -6,6 +6,10 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import org.setu.medical_appointment_tracker.data.AppData
+import org.setu.medical_appointment_tracker.models.MedicationModel
+import org.setu.medical_appointment_tracker.R
+import timber.log.Timber
 
 class AddEditMedicationActivity : AppCompatActivity() {
 
@@ -46,10 +50,12 @@ class AddEditMedicationActivity : AppCompatActivity() {
         }
 
         saveMedsButton.setOnClickListener {
+            Timber.i("Save button clicked")
             saveMark()
         }
 
         cancelMedsButton.setOnClickListener {
+            Timber.i("Cancel button clicked")
             finish()
         }
     }
@@ -59,6 +65,7 @@ class AddEditMedicationActivity : AppCompatActivity() {
         val mark = AppData.placedMeds.findOne(id)
 
         if (mark == null) {
+            Timber.e("No mark found with id=%d", id)
             Toast.makeText(
                 this,
                 "Mark not found",
@@ -82,6 +89,7 @@ class AddEditMedicationActivity : AppCompatActivity() {
         val doctor = medsDoctorInput.text.toString().trim()
 
         if (title.isEmpty()) {
+            Timber.w("Save failed: title is empty")
             medsTitleInput.error = "Title is required"
             return
         }
@@ -104,6 +112,8 @@ class AddEditMedicationActivity : AppCompatActivity() {
 
             AppData.placedMeds.create(mark)
 
+            Timber.i("Mark created: title=%s", mark.title)
+
             Toast.makeText(
                 this,
                 "Medication created",
@@ -121,6 +131,8 @@ class AddEditMedicationActivity : AppCompatActivity() {
             )
 
             AppData.placedMeds.update(mark)
+
+            Timber.i("Medication updated: title=%s", mark.title)
 
             Toast.makeText(
                 this,
