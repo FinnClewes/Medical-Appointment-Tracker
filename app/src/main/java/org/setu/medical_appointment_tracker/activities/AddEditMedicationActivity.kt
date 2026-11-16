@@ -10,6 +10,10 @@ import org.setu.medical_appointment_tracker.data.AppData
 import org.setu.medical_appointment_tracker.models.MedicationModel
 import org.setu.medical_appointment_tracker.R
 import timber.log.Timber
+import android.content.Intent
+import android.net.Uri
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 
 class AddEditMedicationActivity : AppCompatActivity() {
 
@@ -17,8 +21,25 @@ class AddEditMedicationActivity : AppCompatActivity() {
     private lateinit var medsDescriptionInput: EditText
     private lateinit var medsDoctorInput: EditText
     private lateinit var amountInput: EditText
-
     private var editingId: Long? = null
+    private lateinit var imagePreview: ImageView
+    private var selectedImageUri: Uri? = null
+
+    private val imagePicker =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            if (uri != null) {
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (_: SecurityException) {
+                    // some providers don't allow persistable access
+                }
+                selectedImageUri = uri
+                imagePreview.setImageURI(uri)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +53,8 @@ class AddEditMedicationActivity : AppCompatActivity() {
         medsDoctorInput = findViewById(R.id.doctorText)
 
         amountInput = findViewById(R.id.amountInput)
+
+        imagePreview = findViewById(R.id.imageViewAddMeds)
 
         val saveMedsButton = findViewById<Button>(R.id.saveMedsButton)
 
@@ -47,6 +70,10 @@ class AddEditMedicationActivity : AppCompatActivity() {
                 .text = "Edit Medication"
 
             loadExistingMark(editingId!!)
+        }
+
+        findViewById<Button>(R.id.imagePickButtonMeds).setOnClickListener {
+            imagePicker.launch(arrayOf("image/*"))
         }
 
         saveMedsButton.setOnClickListener {
@@ -80,6 +107,13 @@ class AddEditMedicationActivity : AppCompatActivity() {
         medsDescriptionInput.setText(mark.description)
         medsDoctorInput.setText(mark.doctor)
         amountInput.setText(mark.amount.toString())
+        selectedImageUri = mark.imageUri?.let { Uri.parse(it) }
+
+        if (selectedImageUri != null) {
+            imagePreview.setImageURI(selectedImageUri)
+        } else {
+            imagePreview.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
     }
 
     private fun saveMark() {
@@ -108,6 +142,7 @@ class AddEditMedicationActivity : AppCompatActivity() {
                 description = description,
                 doctor = doctor,
                 amount = amount,
+                imageUri = selectedImageUri?.toString()
             )
 
             AppData.placedMeds.create(mark)
@@ -128,6 +163,7 @@ class AddEditMedicationActivity : AppCompatActivity() {
                 description = description,
                 doctor = doctor,
                 amount = amount,
+                imageUri = selectedImageUri?.toString()
             )
 
             AppData.placedMeds.update(mark)

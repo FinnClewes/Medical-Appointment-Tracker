@@ -12,17 +12,20 @@ class MedicationMemStore {
     }
 
     fun create(medication: MedicationModel) {
+        medication.validate()
         medication.id = lastId.incrementAndGet()
         medications.add(medication)
     }
 
     fun update(medication: MedicationModel): Boolean {
+        medication.validate()
         val foundMedication = findOne(medication.id)
         return if (foundMedication != null) {
             foundMedication.title = medication.title
             foundMedication.description = medication.description
             foundMedication.doctor = medication.doctor
             foundMedication.amount = medication.amount
+            foundMedication.imageUri = medication.imageUri
             true
         } else {
             false

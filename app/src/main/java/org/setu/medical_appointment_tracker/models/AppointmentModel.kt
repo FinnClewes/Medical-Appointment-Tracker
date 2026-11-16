@@ -11,5 +11,12 @@ data class AppointmentModel(
     var doctor: String = "",
     var date: String = "",
     var x: Float = 0F,
-    var y: Float = 0F
-)
+    var y: Float = 0F,
+    var imageUri: String? = null
+) {
+    fun validate() {
+        require(title.isNotBlank()) { "Name must not be empty." }
+        require(x.isFinite() && x in -90f..90f) { "Latitude must be between -90 and 90." }
+        require(y.isFinite() && y in -180f..180f) { "Longitude must be between -180 and 180." }
+    }
+}
