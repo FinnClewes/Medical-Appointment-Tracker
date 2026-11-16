@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -78,6 +79,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Cancel" />
+
+            <Button
+                android:id="@+id/imagePickButtonMeds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Image" />
+
+            <ImageView
+                android:id="@+id/imageViewAddMeds"
+                tools:srcCompat="@tools:sample/avatars"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
 
         </LinearLayout>
     </ScrollView>

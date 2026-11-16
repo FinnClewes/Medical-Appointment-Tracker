@@ -1,9 +1,11 @@
 package org.setu.medical_appointment_tracker.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.setu.medical_appointment_tracker.R
@@ -30,11 +32,7 @@ class MedicationAdapter(
         val amountText: TextView =
             itemView.findViewById(R.id.amountText)
 
-        val editMedsButton: Button =
-            itemView.findViewById(R.id.editMedsButton)
-
-        val deleteMedsButton: Button =
-            itemView.findViewById(R.id.deleteMedsButton)
+        val markImage: ImageView = itemView.findViewById(R.id.markImageMeds)
     }
 
     override fun onCreateViewHolder(
@@ -59,6 +57,8 @@ class MedicationAdapter(
 
         val mark = marks[position]
 
+        val imageUri = mark.imageUri?.let { Uri.parse(it) }
+
         holder.medsTitleText.text =
             "${mark.id}: ${mark.title}"
 
@@ -79,6 +79,12 @@ class MedicationAdapter(
         holder.itemView.setOnLongClickListener {
             Timber.i("Medication long-clicked: id=%d, title=%s", mark.id, mark.title)
             listener.onMedsLongClick(mark)
+        }
+
+        if (imageUri != null) {
+            holder.markImage.setImageURI(imageUri)
+        } else {
+            holder.markImage.setImageResource(android.R.drawable.ic_menu_gallery)
         }
     }
 

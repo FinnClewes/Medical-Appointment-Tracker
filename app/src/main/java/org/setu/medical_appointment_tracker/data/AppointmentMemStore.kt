@@ -13,24 +13,24 @@ class AppointmentMemStore {
     }
 
     fun create(appointment: AppointmentModel) {
+        appointment.validate()
         appointment.id = lastId.incrementAndGet()
         appointments.add(appointment)
         Timber.i("Created appointment: id=%d, title=%s", appointment.id, appointment.title)
     }
 
     fun update(appointment: AppointmentModel): Boolean {
+        appointment.validate()
         val foundAppointment = findOne(appointment.id)
         return if (foundAppointment != null) {
             foundAppointment.title = appointment.title
             foundAppointment.description = appointment.description
             foundAppointment.doctor = appointment.doctor
-            foundAppointment.date = appointment.date
             foundAppointment.x = appointment.x
             foundAppointment.y = appointment.y
-            Timber.i("Updated appointment: id=%d, title=%s", appointment.id, appointment.title)
+            foundAppointment.imageUri = appointment.imageUri
             true
         } else {
-            Timber.i("Update failed: no appointment with id=%d", appointment.id)
             false
         }
     }

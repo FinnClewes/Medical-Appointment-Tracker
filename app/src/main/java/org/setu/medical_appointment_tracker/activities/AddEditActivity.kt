@@ -12,6 +12,10 @@ import org.setu.medical_appointment_tracker.models.AppointmentModel
 import org.setu.medical_appointment_tracker.R
 import timber.log.Timber
 import java.util.Calendar
+import android.content.Intent
+import android.net.Uri
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 
 class AddEditActivity : AppCompatActivity() {
 
@@ -21,8 +25,25 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var dateInput: EditText
     private lateinit var xInput: EditText
     private lateinit var yInput: EditText
-
     private var editingId: Long? = null
+    private lateinit var imagePreview: ImageView
+    private var selectedImageUri: Uri? = null
+
+    private val imagePicker =
+        registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            if (uri != null) {
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        uri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (_: SecurityException) {
+                    // some providers don't allow persistable access
+                }
+                selectedImageUri = uri
+                imagePreview.setImageURI(uri)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +62,8 @@ class AddEditActivity : AppCompatActivity() {
 
         yInput = findViewById(R.id.yInput)
 
+        imagePreview = findViewById(R.id.imageViewAdd)
+
         val saveButton = findViewById<Button>(R.id.saveButton)
 
         val cancelButton = findViewById<Button>(R.id.cancelButton)
@@ -58,6 +81,10 @@ class AddEditActivity : AppCompatActivity() {
         }
 
         dateInput.setOnClickListener { showDatePicker() }
+
+        findViewById<Button>(R.id.imagePickButton).setOnClickListener {
+            imagePicker.launch(arrayOf("image/*"))
+        }
 
         saveButton.setOnClickListener {
             Timber.i("Save button clicked")
@@ -92,6 +119,14 @@ class AddEditActivity : AppCompatActivity() {
         dateInput.setText(mark.date)
         xInput.setText(mark.x.toString())
         yInput.setText(mark.y.toString())
+
+        selectedImageUri = mark.imageUri?.let { Uri.parse(it) }
+
+        if (selectedImageUri != null) {
+            imagePreview.setImageURI(selectedImageUri)
+        } else {
+            imagePreview.setImageResource(android.R.drawable.ic_menu_gallery)
+        }
     }
 
     private fun showDatePicker() {
@@ -120,6 +155,12 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
+        if (date.isEmpty()) {
+            Timber.w("Save failed: date is empty")
+            dateInput.error = "Date is required"
+            return
+        }
+
         val x = xInput.text.toString().toFloatOrNull()
 
         if (x == null) {
@@ -136,48 +177,41 @@ class AddEditActivity : AppCompatActivity() {
             return
         }
 
-        if (editingId == null || editingId == -1L) {
-
-            val mark = AppointmentModel(
-                title = title,
-                description = description,
-                doctor = doctor,
-                date = date,
-                x = x,
-                y = y
-            )
-
-            AppData.placedMarks.create(mark)
-
-            Timber.i("Appointment created: title=%s, x=%f, y=%f", mark.title, mark.x, mark.y)
-
-            Toast.makeText(
-                this,
-                "Appointment created",
-                Toast.LENGTH_SHORT
-            ).show()
-
-        } else {
-
-            val mark = AppointmentModel(
-                id = editingId!!,
-                title = title,
-                description = description,
-                doctor = doctor,
-                date = date,
-                x = x,
-                y = y
-            )
-
-            AppData.placedMarks.update(mark)
-
-            Timber.i("Mark updated: id=%d, title=%s", mark.id, mark.title)
-
-            Toast.makeText(
-                this,
-                "Appointment updated",
-                Toast.LENGTH_SHORT
-            ).show()
+        try {
+            if (editingId == null) {
+                val mark = AppointmentModel(
+                    title = title,
+                    description = description,
+                    doctor = doctor,
+                    date = date,
+                    x = x,
+                    y = y,
+                    imageUri = selectedImageUri?.toString()
+                )
+                AppData.placedMarks.create(mark)
+                Timber.i("Appointment created: id=%d, title=%s", mark.id, mark.title)
+                Toast.makeText(this, "Appointment created", Toast.LENGTH_SHORT).show()
+            } else {
+                val mark = AppointmentModel(
+                    id = editingId!!,
+                    title = title,
+                    description = description,
+                    doctor = doctor,
+                    date = date,
+                    x = x,
+                    y = y,
+                    imageUri = selectedImageUri?.toString()
+                )
+                AppData.placedMarks.update(mark)
+                Timber.i("Appointment updated: id=%d, title=%s", mark.id, mark.title)
+                Toast.makeText(this, "Appointment updated", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: IllegalArgumentException) {
+            Timber.w("Save rejected: %s", e.message)
+            Toast.makeText(this, e.message ?: "Please check the entered values.", Toast.LENGTH_LONG).show()
+            xInput.error = "Must be a decimal between -90.0 and 90.0"
+            yInput.error = "Must be a decimal between -180.0 and 180.0"
+            return
         }
 
         finish()

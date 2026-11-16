@@ -5,5 +5,10 @@ data class MedicationModel(
     var title: String = "",
     var description: String = "",
     var doctor: String = "",
-    var amount: Float = 0F
-)
+    var amount: Float = 0F,
+    var imageUri: String? = null
+) {
+    fun validate() {
+        require(title.isNotBlank()) { "Name must not be empty." }
+    }
+}
