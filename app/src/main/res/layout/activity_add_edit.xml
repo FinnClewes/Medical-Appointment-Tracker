@@ -101,16 +101,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/saveButton"
+                android:id="@+id/mapPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save" />
-
-            <Button
-                android:id="@+id/cancelButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cancel" />
+                android:text="Pick Map" />
 
             <Button
                 android:id="@+id/imagePickButton"
@@ -125,6 +119,18 @@
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
                 tools:srcCompat="@tools:sample/avatars" />
+
+            <Button
+                android:id="@+id/saveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+
+            <Button
+                android:id="@+id/cancelButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancel" />
 
         </LinearLayout>
     </ScrollView>
