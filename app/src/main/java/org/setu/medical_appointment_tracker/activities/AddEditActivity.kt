@@ -29,6 +29,10 @@ class AddEditActivity : AppCompatActivity() {
     private lateinit var imagePreview: ImageView
     private var selectedImageUri: Uri? = null
 
+    private var selectedLatitude: Double? = null
+
+    private var selectedLongitude: Double? = null
+
     private val imagePicker =
         registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             if (uri != null) {
@@ -91,9 +95,43 @@ class AddEditActivity : AppCompatActivity() {
             saveMark()
         }
 
+        val mapPicker =
+            registerForActivityResult(
+                ActivityResultContracts.StartActivityForResult()
+            ) { result ->
+                if (result.resultCode == RESULT_OK) {
+                    val data = result.data ?: return@registerForActivityResult
+                    selectedLatitude = data.getDoubleExtra("latitude", 0.0)
+                    selectedLongitude = data.getDoubleExtra("longitude", 0.0)
+
+                    selectedLatitude?.let {
+                        xInput.setText(it.toString())
+                    }
+
+                    selectedLongitude?.let {
+                        yInput.setText(it.toString())
+                    }
+                }
+            }
+
         cancelButton.setOnClickListener {
             Timber.i("Cancel button clicked")
             finish()
+        }
+
+        findViewById<Button>(R.id.mapPicker).setOnClickListener {
+            val intent = Intent(this, MapPickerActivity::class.java)
+
+            val lat = xInput.text.toString().toDoubleOrNull()
+            val lon = yInput.text.toString().toDoubleOrNull()
+            if (lat != null && lon != null) {
+                intent.putExtra("latitude", lat)
+                intent.putExtra("longitude", lon)
+            }
+
+            intent.putExtra("title", titleInput.text.toString())
+
+            mapPicker.launch(intent)
         }
     }
 
