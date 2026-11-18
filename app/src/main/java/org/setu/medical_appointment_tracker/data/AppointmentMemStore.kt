@@ -1,12 +1,42 @@
 package org.setu.medical_appointment_tracker.data
 
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import org.setu.medical_appointment_tracker.models.AppointmentModel
 import timber.log.Timber
+import java.io.File
 import java.util.concurrent.atomic.AtomicLong
 
-class AppointmentMemStore {
+class AppointmentMemStore(private val apptFile: File) {
     private val appointments = ArrayList<AppointmentModel>()
     private val lastId = AtomicLong(0L)
+
+    private val gson = GsonBuilder()
+        .setPrettyPrinting()
+        .create()
+
+    init {
+        load()
+    }
+
+    private fun load() {
+        if (!apptFile.exists()) return
+
+        val type = object : TypeToken<ArrayList<AppointmentModel>>() {}.type
+
+        val loaded: ArrayList<AppointmentModel> =
+            gson.fromJson(apptFile.readText(), type) ?: arrayListOf()
+
+        appointments.clear()
+        appointments.addAll(loaded)
+
+        lastId.set(appointments.maxOfOrNull { it.id } ?: 0L)
+    }
+
+    private fun save() {
+        apptFile.parentFile?.mkdirs()
+        apptFile.writeText(gson.toJson(appointments))
+    }
 
     fun findAll(): List<AppointmentModel> {
         return appointments
@@ -17,6 +47,7 @@ class AppointmentMemStore {
         appointment.id = lastId.incrementAndGet()
         appointments.add(appointment)
         Timber.i("Created appointment: id=%d, title=%s", appointment.id, appointment.title)
+        save()
     }
 
     fun update(appointment: AppointmentModel): Boolean {
@@ -29,6 +60,7 @@ class AppointmentMemStore {
             foundAppointment.x = appointment.x
             foundAppointment.y = appointment.y
             foundAppointment.imageUri = appointment.imageUri
+            save()
             true
         } else {
             false
@@ -40,6 +72,7 @@ class AppointmentMemStore {
         return if (foundAppointment != null) {
             appointments.remove(foundAppointment)
             Timber.i("Deleted appointment: id=%d", id)
+            save()
             true
         } else {
             Timber.w("Delete failed: no appointment with id=%d", id)
