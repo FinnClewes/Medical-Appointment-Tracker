@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.setu.medical_appointment_tracker.R
+import org.setu.medical_appointment_tracker.data.AppData
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
@@ -61,6 +62,6 @@ class MainActivity : AppCompatActivity() {
                 Intent(this, AddEditActivity::class.java)
             )
         }
-
+        AppData.initialize(this)
     }
 }
