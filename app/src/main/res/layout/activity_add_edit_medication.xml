@@ -69,6 +69,20 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
+                android:id="@+id/imagePickButtonMeds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Image" />
+
+            <ImageView
+                android:id="@+id/imageViewAddMeds"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <Button
                 android:id="@+id/saveMedsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,20 +93,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Cancel" />
-
-            <Button
-                android:id="@+id/imagePickButtonMeds"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Select Image" />
-
-            <ImageView
-                android:id="@+id/imageViewAddMeds"
-                tools:srcCompat="@tools:sample/avatars"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop" />
 
         </LinearLayout>
     </ScrollView>
